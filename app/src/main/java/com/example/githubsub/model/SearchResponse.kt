@@ -1,10 +1,10 @@
-package com.example.githubsub.repository
+package com.example.githubsub.model
 
 import com.squareup.moshi.Json
 
 /// 検索結果レスポンス
 data class SearchResponse(
-    val items: List<SearchItem>
+    val contents: List<SearchItem>
 )
 
 data class SearchItem(

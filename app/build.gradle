@@ -3,12 +3,11 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-    id 'com.google.gms.google-services'
 }
 
 android {
     namespace 'com.example.githubsub'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.githubsub"
@@ -80,4 +79,11 @@ dependencies {
     implementation 'com.squareup.moshi:moshi-kotlin:1.10.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    // For control over item selection of both touch and mouse driven selection
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+
 }
