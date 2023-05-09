@@ -1,13 +1,12 @@
-package com.example.githubsub.repository
+package com.example.githubsub.repository.repository
 
 
-import com.example.githubsub.model.SearchResponse
-import dagger.Module
-import dagger.Provides
+import com.example.githubsub.model.SearchedRepository
+import com.example.githubsub.repository.GithubInterface
+import com.example.githubsub.repository.GithubRetrofitProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,9 +18,10 @@ class GithubRepository @Inject constructor(): IGithubRepository {
     }
 
     @Inject
-    override suspend fun searchRepository(query: String, page: Int) : Response<SearchResponse> = withContext(Dispatchers.IO){
+    override suspend fun searchRepository(query: String, page: Int) : Response<SearchedRepository> = withContext(Dispatchers.IO){
         val service = retrofit.create(GithubInterface::class.java)
         return@withContext service.getSearchRepositories(query, page).execute()
     }
 
 }
+

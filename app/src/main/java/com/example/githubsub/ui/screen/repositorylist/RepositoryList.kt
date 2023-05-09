@@ -1,21 +1,13 @@
-package com.example.githubsub.ui.screen
+package com.example.githubsub.ui.screen.repositorylist
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.githubsub.model.SearchItem
-import com.example.githubsub.model.SearchResponse
 
 @Composable
 @Preview

@@ -1,6 +1,6 @@
-package com.example.githubsub.repository
+package com.example.githubsub.repository.repository
 
-import com.example.githubsub.model.SearchResponse
+import com.example.githubsub.model.SearchedRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -12,7 +12,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 
 interface IGithubRepository {
-    suspend fun searchRepository(query: String, page: Int) : Response<SearchResponse>
+    suspend fun searchRepository(query: String, page: Int) : Response<SearchedRepository>
 }
 
 //@Module

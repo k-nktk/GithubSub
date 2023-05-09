@@ -1,12 +1,10 @@
-package com.example.githubsub.ui.screen
+package com.example.githubsub.ui.screen.userlist
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.githubsub.model.SearchResponse
-import com.example.githubsub.repository.GithubRepository
-import com.example.githubsub.repository.GithubRetrofitProvider
-import com.example.githubsub.repository.IGithubRepository
+import com.example.githubsub.model.SearchedUser
+import com.example.githubsub.repository.user.GithubUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,26 +13,26 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RepositoryListViewModel @Inject constructor(): ViewModel(){
+class UserListViewModel @Inject constructor(): ViewModel(){
 
-    private val _state = MutableStateFlow(RepositoryListState.initValue)
+    private val _state = MutableStateFlow(UserListState.initValue)
     val state = _state.asStateFlow()
 
     private fun currentState() = _state.value
-    private fun updateState(newState: () -> RepositoryListState) {
+    private fun updateState(newState: () -> UserListState) {
         _state.value = newState()
     }
 
     //API
     //Todo: Inject
 //    private val provider: GithubRetrofitProvider = GithubRetrofitProvider()
-    private val repository: GithubRepository = GithubRepository()
+    private val repository: GithubUser = GithubUser()
 
     //リポジトリを検索
-    fun searchRepository() {
+    fun searchUser() {
         val query = this.state.value.query
         viewModelScope.launch(Dispatchers.Main) {
-            repository.searchRepository(query, 5).also { response ->
+            repository.searchUser(query, 5).also { response ->
                 if (response.isSuccessful) {
                     setResult(response.body()!!)
                 } else {
@@ -46,11 +44,11 @@ class RepositoryListViewModel @Inject constructor(): ViewModel(){
 
     fun setQuery(query: String) {
         val oldState = currentState()
-        updateState { oldState.copy(query = query, searchResponse = oldState.searchResponse) }
+        updateState { oldState.copy(query = query, searchedUser = oldState.searchedUser) }
     }
 
-    private fun setResult(response: SearchResponse) {
+    private fun setResult(response: SearchedUser) {
         val oldState = currentState()
-        updateState { oldState.copy(query = oldState.query, searchResponse = response) }
+        updateState { oldState.copy(query = oldState.query, searchedUser = response) }
     }
 }
