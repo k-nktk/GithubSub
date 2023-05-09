@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 /// 検索結果レスポンス
 data class SearchResponse(
-    val contents: List<SearchItem>
+    val items: List<SearchItem>
 )
 
 data class SearchItem(
