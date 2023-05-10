@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.githubsub.ui.screen.navigation.NavigationHost
 import com.example.githubsub.ui.screen.repositorylist.RepositoryList
 import com.example.githubsub.ui.screen.userlist.UserList
 import com.example.githubsub.ui.theme.GithubSubTheme
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    UserList()
+                    NavigationHost()
 //                    RepositoryList()
                 }
             }
