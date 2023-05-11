@@ -1,4 +1,5 @@
 package com.example.githubsub.repository
+import com.example.githubsub.model.SearchedIssue
 import com.example.githubsub.model.SearchedRepository
 import com.example.githubsub.model.SearchedUser
 import retrofit2.Call
@@ -13,4 +14,7 @@ interface GithubInterface {
 
     @GET("/search/users")
     fun getSearchUsers(@Query("q") query: String, @Query("per_page") page: Int) : Call<SearchedUser>
+
+    @GET("/search/issues")
+    fun getSearchIssues(@Query("q") query: String, @Query("per_page") page: Int) : Call<SearchedIssue>
 }

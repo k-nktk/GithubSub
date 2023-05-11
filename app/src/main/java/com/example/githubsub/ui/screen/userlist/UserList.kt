@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
@@ -80,7 +79,6 @@ fun UserList(
                     AsyncImage(
                         model = it.imageUrl,
                         contentDescription = null,
-
                     )
                     Text(text = it.name)
                 }
