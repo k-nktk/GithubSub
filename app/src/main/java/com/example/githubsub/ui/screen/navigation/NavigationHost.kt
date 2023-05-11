@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Adjust
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,21 +19,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.githubsub.ui.screen.repositorylist.RepositoryList
 import com.example.githubsub.ui.screen.userlist.UserList
-
-//@Composable
-//fun NavigationHost(
-//    navController: NavHostController = rememberNavController(),
-//    startDestination: String = Screen.UserList.route
-//) {
-//    NavHost(
-//        navController = navController,
-//        startDestination = startDestination
-//    ) {
-//        composable(route = Screen.UserList.route) {
-//            UserList()
-//        }
-//    }
-//}
 
 @Composable
 fun NavigationHost(
@@ -50,7 +37,7 @@ fun NavigationHost(
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { screen ->
                     BottomNavigationItem(
-                        icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+                        icon = { Icon(screen.icon, contentDescription = null) },
 //                        label = { Text(stringResource(screen.resourceId)) },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {

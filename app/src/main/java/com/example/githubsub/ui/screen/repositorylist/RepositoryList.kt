@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -17,6 +18,9 @@ fun RepositoryList(
 
     val state by viewModel.state.collectAsState()
     Column {
+        TopAppBar(
+            title = { Text(text = "Repository") }
+        )
         TextField(
             value = state.query,
             onValueChange = {

@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -28,18 +29,22 @@ fun UserList(
 ) {
     val focusRequester = remember { FocusRequester() }
     val state by viewModel.state.collectAsState()
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .clickable(
                 interactionSource = MutableInteractionSource(),
+                indication = null,
                 onClick = { focusRequester.requestFocus() },
                 enabled = true,
-                indication = null,
             )
             .focusRequester(focusRequester)
             .focusTarget()
+            .fillMaxSize()
     ) {
+        TopAppBar(
+            title = { Text(text = "Issues") }
+        )
         Row(
             Modifier
                 .fillMaxWidth()
@@ -64,10 +69,18 @@ fun UserList(
 
         LazyColumn {
             items(state.searchedUser.items) {
-                Row(Modifier.height(40.dp)) {
+                Row(
+                    Modifier
+                        .height(40.dp)
+                        .fillMaxWidth()
+                        .clickable(
+                        onClick = {}
+                        )
+                ) {
                     AsyncImage(
                         model = it.imageUrl,
                         contentDescription = null,
+
                     )
                     Text(text = it.name)
                 }
