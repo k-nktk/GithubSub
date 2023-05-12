@@ -17,15 +17,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.githubsub.ui.screen.issuelist.IssueList
 import com.example.githubsub.ui.screen.repositorylist.RepositoryList
 import com.example.githubsub.ui.screen.userlist.UserList
 
 @Composable
 fun NavigationHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.UserList.route
+    startDestination: String = Screen.IssueList.route
 ) {
     val items = listOf(
+        Screen.IssueList,
         Screen.UserList,
         Screen.RepositoryList,
     )
@@ -60,7 +62,8 @@ fun NavigationHost(
             }
         }
     ) { innerPadding ->
-        NavHost(navController, startDestination = Screen.UserList.route, Modifier.padding(innerPadding)) {
+        NavHost(navController, startDestination = startDestination, Modifier.padding(innerPadding)) {
+            composable(Screen.IssueList.route) { IssueList()}
             composable(Screen.UserList.route) { UserList() }
             composable(Screen.RepositoryList.route) { RepositoryList() }
         }

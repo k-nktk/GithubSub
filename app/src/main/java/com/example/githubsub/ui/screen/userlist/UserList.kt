@@ -42,7 +42,7 @@ fun UserList(
             .fillMaxSize()
     ) {
         TopAppBar(
-            title = { Text(text = "Issues") }
+            title = { Text(text = "Users") }
         )
         Row(
             Modifier
