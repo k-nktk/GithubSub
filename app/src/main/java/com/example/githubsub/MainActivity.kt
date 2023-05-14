@@ -10,11 +10,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.githubsub.data.settingsDataStore
 import com.example.githubsub.ui.screen.navigation.NavigationHost
 import com.example.githubsub.ui.screen.repositorylist.RepositoryList
 import com.example.githubsub.ui.screen.userlist.UserList
 import com.example.githubsub.ui.theme.GithubSubTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -29,10 +32,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     NavigationHost()
-//                    RepositoryList()
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
     }
 }
 
