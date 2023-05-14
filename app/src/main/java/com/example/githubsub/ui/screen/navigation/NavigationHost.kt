@@ -2,14 +2,9 @@ package com.example.githubsub.ui.screen.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Adjust
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -39,8 +34,8 @@ fun NavigationHost(
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { screen ->
                     BottomNavigationItem(
+                        label = { Text(screen.name) },
                         icon = { Icon(screen.icon, contentDescription = null) },
-//                        label = { Text(stringResource(screen.resourceId)) },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
                             navController.navigate(screen.route) {
@@ -63,7 +58,7 @@ fun NavigationHost(
         }
     ) { innerPadding ->
         NavHost(navController, startDestination = startDestination, Modifier.padding(innerPadding)) {
-            composable(Screen.IssueList.route) { IssueList()}
+            composable(Screen.IssueList.route) { IssueList() }
             composable(Screen.UserList.route) { UserList() }
             composable(Screen.RepositoryList.route) { RepositoryList() }
         }

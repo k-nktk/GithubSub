@@ -23,6 +23,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
+import com.example.githubsub.ui.screen.ObserveLifecycleEvent
 
 @Composable
 @Preview
@@ -30,9 +31,9 @@ fun UserList(
     viewModel: UserListViewModel = hiltViewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
+
     val focusRequester = remember { FocusRequester() }
     var showDialog by remember { mutableStateOf(false) }
-    var mainUserText by remember { mutableStateOf("") }
 
     val state by viewModel.state.collectAsState()
 
@@ -106,6 +107,7 @@ fun UserList(
                 TextButton(
                     onClick = {
                         showDialog = false
+                        viewModel.setMainUser(state.query)
                         viewModel.pushMainUser()
                     }
                 ) {
@@ -135,32 +137,6 @@ fun UserList(
         when (event) {
             Lifecycle.Event.ON_CREATE -> { viewModel.fetchMainUser() }
             else -> {}
-        }
-    }
-}
-
-
-
-@Composable
-fun ObserveLifecycleEvent(onEvent: (Lifecycle.Event) -> Unit = {}) {
-    // Safely update the current lambdas when a new one is provided
-    val currentOnEvent by rememberUpdatedState(onEvent)
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    // If `lifecycleOwner` changes, dispose and reset the effect
-    DisposableEffect(lifecycleOwner) {
-        // Create an observer that triggers our remembered callbacks
-        // for sending analytics events
-        val observer = LifecycleEventObserver { _, event ->
-            currentOnEvent(event)
-        }
-
-        // Add the observer to the lifecycle
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        // When the effect leaves the Composition, remove the observer
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 }

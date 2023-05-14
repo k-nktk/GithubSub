@@ -21,9 +21,6 @@ class UserListViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ): ViewModel(){
 
-//    init {
-//        fetchMainUser()
-//    }
     private val _state = MutableStateFlow(UserListState.initValue)
     val state = _state.asStateFlow()
 
@@ -82,12 +79,18 @@ class UserListViewModel @Inject constructor(
 // UI
     fun setQuery(query: String) {
         val oldState = currentState()
-        updateState { oldState.copy(query = query, searchedUser = oldState.searchedUser) }
+        updateState { oldState.copy(query = query, searchedUser = oldState.searchedUser, mainUser = oldState.mainUser) }
 //    Todo: change copy(const) to copy(proceeding = true)
     }
 
     private fun setResult(response: SearchedUser) {
         val oldState = currentState()
-        updateState { oldState.copy(query = oldState.query, searchedUser = response) }
+        updateState { oldState.copy(query = oldState.query, searchedUser = response, mainUser = oldState.mainUser) }
+    }
+
+    fun setMainUser(mainUser: String) {
+        val oldState = currentState()
+        updateState { oldState.copy(query = oldState.query, searchedUser = oldState.searchedUser, mainUser = mainUser) }
+
     }
 }
