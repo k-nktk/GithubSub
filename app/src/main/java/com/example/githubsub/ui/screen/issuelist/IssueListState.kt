@@ -1,14 +1,29 @@
 package com.example.githubsub.ui.screen.issuelist
+import com.example.githubsub.model.Label
 import com.example.githubsub.model.SearchedIssue
+import com.example.githubsub.model.SearchedRepository
 import com.example.githubsub.model.SearchedUser
 
 
 data class IssueListState(
-    val searchedIssue: SearchedIssue,
+    val issueListContent: List<IssueListItem>,
+//    val searchedRepository: SearchedRepository
+//    val searchedContent: Map<SearchedIssue, SearchedRepository>
+//    val issueTitle: String,
+//    val label: List<Label>,
+
 ) {
     companion object {
         val initValue = IssueListState(
-            searchedIssue = SearchedIssue(mutableListOf()),
+            issueListContent = mutableListOf()
         )
     }
 }
+
+data class IssueListItem(
+    val issueTitle: String,
+    val repositoryTitle: String,
+    val user: String,
+    val avatarUrl: String,
+    val labels: List<Label>
+)

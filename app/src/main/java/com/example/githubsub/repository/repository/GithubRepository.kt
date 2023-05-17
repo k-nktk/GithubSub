@@ -1,6 +1,7 @@
 package com.example.githubsub.repository.repository
 
 
+import com.example.githubsub.model.SearchRepositoryItem
 import com.example.githubsub.model.SearchedRepository
 import com.example.githubsub.repository.GithubInterface
 import com.example.githubsub.repository.GithubRetrofitProvider
@@ -21,6 +22,12 @@ class GithubRepository @Inject constructor(): IGithubRepository {
     override suspend fun searchRepository(query: String, page: Int) : Response<SearchedRepository> = withContext(Dispatchers.IO){
         val service = retrofit.create(GithubInterface::class.java)
         return@withContext service.getSearchRepositories(query, page).execute()
+    }
+
+    @Inject
+    override suspend fun searchIssueRepository(url: String): Response<SearchRepositoryItem>  = withContext(Dispatchers.IO){
+        val service = retrofit.create(GithubInterface::class.java)
+        return@withContext service.getIssueRepository(url).execute()
     }
 
 }

@@ -1,14 +1,20 @@
 package com.example.githubsub.ui.screen.issuelist
 
 import android.util.Log
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.githubsub.model.Label
 import com.example.githubsub.model.SearchedIssue
+import com.example.githubsub.model.SearchedRepository
 import com.example.githubsub.repository.datastore.DataStoreRepository
 import com.example.githubsub.repository.datastore.Result
 import com.example.githubsub.repository.issue.GithubIssue
+import com.example.githubsub.repository.repository.GithubRepository
+import com.example.githubsub.repository.user.GithubUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -32,6 +38,7 @@ class IssueListViewModel @Inject constructor(
     //Todo: Inject
 //    private val provider: GithubRetrofitProvider = GithubRetrofitProvider()
     private val repository: GithubIssue = GithubIssue()
+    private val searchedRepository: GithubRepository = GithubRepository()
 
 
     //  get data from data store
@@ -49,40 +56,53 @@ class IssueListViewModel @Inject constructor(
                         if (!result.data.user.isNullOrEmpty()) {
 //                            updateState { oldState.copy(query = oldState.query, searchedIssue = oldState.searchedIssue, mainUser = result.data.user) }
                             query = result.data.user
-                        } else {
-                            updateState {
-                                oldState.copy(
-                                    searchedIssue = oldState.searchedIssue,
+                        }
+                    }
+                    is Result.Error -> {
+
+                    }
+                }
+            }
+            Log.d("test4", query)
+
+            val result: MutableList<IssueListItem> = mutableListOf()
+            repository.searchIssue("user:$query", 10).also { issueResponse ->
+//                Log.d("test2", response.toString())
+                if (issueResponse.isSuccessful) {
+                    issueResponse.body()!!.items.map {
+                        issueItem ->
+                        searchedRepository.searchIssueRepository(issueItem.repositoryUrl).also {
+                            repositoryResponse ->
+                            if (repositoryResponse.isSuccessful) {
+                                result.add(
+                                    IssueListItem(
+                                        issueTitle = issueItem.title,
+                                        repositoryTitle = repositoryResponse.body()!!.name,
+                                        user = issueItem.user.login,
+                                        avatarUrl = issueItem.user.imageUrl,
+                                        labels = issueItem.label
+                                    )
                                 )
                             }
                         }
                     }
-                    is Result.Error -> {
-                        updateState {
-                            oldState.copy(
-                                searchedIssue = oldState.searchedIssue,
-                            )
-                        }
-                    }
-                }
-            }
-
-            Log.d("test4", query)
-            repository.searchIssue("user:$query", 10).also { response ->
-                Log.d("test2", response.toString())
-                if (response.isSuccessful) {
-                    setResult(response.body()!!)
                 } else {
-                    Log.e("test3", response.errorBody()!!.toString())
+                    Log.e("test3", issueResponse.errorBody()!!.toString())
                 }
             }
+            setResult(result)
         }
-        Log.d("fetchMainUser", "is finish")
-
     }
 
-    private fun setResult(response: SearchedIssue) {
+    private fun setResult(issueListContent: List<IssueListItem>) {
         val oldState = currentState()
-        updateState { oldState.copy(searchedIssue = response) }
+//        updateState { oldState.copy(searchedIssue = issueResponse, searchedRepository = repositoryResponse) }
+        updateState { oldState.copy(issueListContent = issueListContent) }
+
     }
+
+    fun provideLabelColor(label: List<Label>): List<Color> {
+        return label.map { Color(android.graphics.Color.parseColor("#" + it.color)) }
+    }
+
 }

@@ -9,5 +9,6 @@ data class SearchedRepository(
 
 data class SearchRepositoryItem(
     val id: Int,
-    @Json(name = "full_name") val fullName: String
+    @Json(name = "full_name") val fullName: String,
+    @Json(name = "name") val name:String
 )

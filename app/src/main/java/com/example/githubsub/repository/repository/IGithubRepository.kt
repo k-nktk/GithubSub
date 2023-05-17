@@ -1,5 +1,6 @@
 package com.example.githubsub.repository.repository
 
+import com.example.githubsub.model.SearchRepositoryItem
 import com.example.githubsub.model.SearchedRepository
 import dagger.Binds
 import dagger.Module
@@ -13,6 +14,8 @@ import retrofit2.Retrofit
 
 interface IGithubRepository {
     suspend fun searchRepository(query: String, page: Int) : Response<SearchedRepository>
+
+    suspend fun searchIssueRepository(url: String): Response<SearchRepositoryItem>
 }
 
 //@Module

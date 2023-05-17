@@ -5,4 +5,5 @@ import retrofit2.Response
 
 interface IGithubUser {
     suspend fun searchUser(query: String, page: Int) : Response<SearchedUser>
+
 }

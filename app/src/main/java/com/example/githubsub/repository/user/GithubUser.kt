@@ -22,5 +22,4 @@ class GithubUser @Inject constructor(): IGithubUser {
         return@withContext service.getSearchUsers(query, page).execute()
     }
 
-
 }
