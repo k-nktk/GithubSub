@@ -35,7 +35,7 @@ fun NavigationHost(
                 items.forEach { screen ->
                     BottomNavigationItem(
                         label = { Text(screen.name) },
-                        icon = { Icon(screen.icon, contentDescription = null) },
+                        icon = { screen.icon?.let { Icon(it, contentDescription = null) } },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
                             navController.navigate(screen.route) {
@@ -58,9 +58,10 @@ fun NavigationHost(
         }
     ) { innerPadding ->
         NavHost(navController, startDestination = startDestination, Modifier.padding(innerPadding)) {
-            composable(Screen.IssueList.route) { IssueList() }
+            composable(Screen.IssueList.route) { IssueList(onClickForNav = {navController.navigate(Screen.IssueDetail.route)}) }
             composable(Screen.UserList.route) { UserList() }
             composable(Screen.RepositoryList.route) { RepositoryList() }
+            composable(Screen.IssueDetail.route) { }
         }
     }
 

@@ -19,9 +19,9 @@ class GithubIssue @Inject constructor(): IGithubIssue {
     }
 
     @Inject
-    override suspend fun searchIssue(query: String, page: Int) : Response<SearchedIssue> = withContext(Dispatchers.IO){
+    override suspend fun searchIssue(query: String, page: Int, clientID: String, clientSecret: String) : Response<SearchedIssue> = withContext(Dispatchers.IO){
         val service = retrofit.create(GithubInterface::class.java)
-        return@withContext service.getSearchIssues(query, page).execute()
+        return@withContext service.getSearchIssues(query, page, clientID, clientSecret).execute()
     }
 
 }

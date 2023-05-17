@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.Label
 import com.example.githubsub.model.SearchedIssue
 import com.example.githubsub.model.SearchedRepository
@@ -66,12 +67,12 @@ class IssueListViewModel @Inject constructor(
             Log.d("test4", query)
 
             val result: MutableList<IssueListItem> = mutableListOf()
-            repository.searchIssue("user:$query", 10).also { issueResponse ->
+            repository.searchIssue("user:$query", 10, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { issueResponse ->
 //                Log.d("test2", response.toString())
                 if (issueResponse.isSuccessful) {
                     issueResponse.body()!!.items.map {
                         issueItem ->
-                        searchedRepository.searchIssueRepository(issueItem.repositoryUrl).also {
+                        searchedRepository.searchIssueRepository(issueItem.repositoryUrl, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also {
                             repositoryResponse ->
                             if (repositoryResponse.isSuccessful) {
                                 result.add(

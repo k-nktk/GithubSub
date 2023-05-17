@@ -42,7 +42,8 @@ import com.example.githubsub.ui.theme.GithubSubTheme
 @Preview
 fun IssueList(
     viewModel: IssueListViewModel = hiltViewModel(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    onClickForNav: () -> Unit = {}
 ) {
     ObserveLifecycleEvent { event ->
         // 検出したイベントに応じた処理を実装する。
@@ -81,7 +82,7 @@ fun IssueList(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(2.dp)
-                            .clickable { },
+                            .clickable(onClick = onClickForNav),
                         backgroundColor = MaterialTheme.colors.background,
                         elevation = 8.dp
                     ) {

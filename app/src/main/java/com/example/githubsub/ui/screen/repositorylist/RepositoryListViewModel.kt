@@ -3,6 +3,7 @@ package com.example.githubsub.ui.screen.repositorylist
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.SearchedRepository
 import com.example.githubsub.repository.repository.GithubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +33,7 @@ class RepositoryListViewModel @Inject constructor(): ViewModel(){
     fun searchRepository() {
         val query = this.state.value.query
         viewModelScope.launch(Dispatchers.Main) {
-            repository.searchRepository(query, 5).also { response ->
+            repository.searchRepository(query, 5, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { response ->
                 if (response.isSuccessful) {
                     setResult(response.body()!!)
                 } else {

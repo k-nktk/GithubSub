@@ -5,7 +5,7 @@ import com.example.githubsub.model.SearchedRepository
 import retrofit2.Response
 
 interface IGithubIssue {
-    suspend fun searchIssue(query: String, page: Int) : Response<SearchedIssue>
+    suspend fun searchIssue(query: String, page: Int, clientID: String, clientSecret: String) : Response<SearchedIssue>
 }
 
 //@Module

@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.application.Settings
+import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.SearchedUser
 import com.example.githubsub.repository.datastore.DataStoreRepository
 import com.example.githubsub.repository.user.GithubUser
@@ -38,7 +39,7 @@ class UserListViewModel @Inject constructor(
     fun searchUser() {
         val query = this.state.value.query
         viewModelScope.launch(Dispatchers.Main) {
-            repository.searchUser(query, 5).also { response ->
+            repository.searchUser(query, 5, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { response ->
                 if (response.isSuccessful) {
                     setResult(response.body()!!)
                 } else {

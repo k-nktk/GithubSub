@@ -13,9 +13,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 
 interface IGithubRepository {
-    suspend fun searchRepository(query: String, page: Int) : Response<SearchedRepository>
+    suspend fun searchRepository(query: String, page: Int, clientID: String, clientSecret: String) : Response<SearchedRepository>
 
-    suspend fun searchIssueRepository(url: String): Response<SearchRepositoryItem>
+    suspend fun searchIssueRepository(url: String, clientID: String, clientSecret: String): Response<SearchRepositoryItem>
 }
 
 //@Module

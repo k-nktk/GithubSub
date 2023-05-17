@@ -46,6 +46,9 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField("String", "CLIENT_ID", "${clientID}")
+        buildConfigField("String", "CLIENT_SECRET", "${clientSecret}")
     }
 
     buildTypes {
