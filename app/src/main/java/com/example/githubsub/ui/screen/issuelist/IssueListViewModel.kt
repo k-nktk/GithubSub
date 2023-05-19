@@ -50,12 +50,10 @@ class IssueListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Main) {
             // MainUserのDataStoreからの取得
             var query: String = ""
-            //                            updateState { oldState.copy(query = oldState.query, searchedIssue = oldState.searchedIssue, mainUser = result.data.user) }
             withContext(Dispatchers.Default) {
                 when (val result = dataStoreRepository.getUserResult()) {
                     is Result.Success -> {
                         if (!result.data.user.isNullOrEmpty()) {
-//                            updateState { oldState.copy(query = oldState.query, searchedIssue = oldState.searchedIssue, mainUser = result.data.user) }
                             query = result.data.user
                         }
                     }
@@ -77,11 +75,12 @@ class IssueListViewModel @Inject constructor(
                             if (repositoryResponse.isSuccessful) {
                                 result.add(
                                     IssueListItem(
+                                        issueNumber =issueItem.number,
                                         issueTitle = issueItem.title,
                                         repositoryTitle = repositoryResponse.body()!!.name,
                                         user = issueItem.user.login,
                                         avatarUrl = issueItem.user.imageUrl,
-                                        labels = issueItem.label
+                                        labels = issueItem.label,
                                     )
                                 )
                             }

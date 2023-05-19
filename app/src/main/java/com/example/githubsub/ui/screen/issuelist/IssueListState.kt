@@ -16,6 +16,7 @@ data class IssueListState(
 }
 
 data class IssueListItem(
+    val issueNumber: Int,
     val issueTitle: String,
     val repositoryTitle: String,
     val user: String,

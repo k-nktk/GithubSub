@@ -11,7 +11,8 @@ data class SearchUserIssue(
     @Json(name = "repository_url") val repositoryUrl: String,
     @Json(name = "title") val title: String,
     @Json(name = "user") val user: User,
-    @Json(name = "labels") val label: List<Label>
+    @Json(name = "labels") val label: List<Label>,
+    @Json(name = "number") val number: Int
 )
 
 data class User(

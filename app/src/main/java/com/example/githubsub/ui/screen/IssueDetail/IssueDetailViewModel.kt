@@ -29,14 +29,14 @@ class IssueDetailViewModel @Inject constructor(): ViewModel() {
     val repository: GithubIssueDetail = GithubIssueDetail()
 //    Todo: getIssueDetail
 
-    fun getIssueDetail() {
+    fun getIssueDetail(owner: String, repo: String, issueNumber: Int) {
         val result: MutableList<CommentListItem> = mutableListOf()
 
         viewModelScope.launch(Dispatchers.Main) {
             repository.searchIssueDetail(
-                owner = "NakatsukaKyohei",
-                repo = "GithubSub",
-                issueNumber = 2,
+                owner = owner,
+                repo = repo,
+                issueNumber = issueNumber,
                 clientID = BuildConfig.CLIENT_ID,
                 clientSecret = BuildConfig.CLIENT_SECRET
             ).also { response ->

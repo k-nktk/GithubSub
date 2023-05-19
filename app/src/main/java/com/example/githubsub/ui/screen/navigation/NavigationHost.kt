@@ -1,5 +1,6 @@
 package com.example.githubsub.ui.screen.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -60,17 +61,38 @@ fun NavigationHost(
     ) { innerPadding ->
         NavHost(navController, startDestination = startDestination, Modifier.padding(innerPadding)) {
             composable(Screen.IssueList.route) {
-                IssueList(
+                IssueList (
                     onClickForNav = {
-                        navController.navigate(Screen.IssueDetail.route){
+                            owner, repo, issueNumber ->
+                            navController.currentBackStackEntry?.run {
+                                savedStateHandle["owner"] = owner
+                                savedStateHandle["repo"] = repo
+                                savedStateHandle["issueNumber"] = issueNumber
+                            }
+                        Log.d("onclicktest-nav-detail", "${owner}/${repo}/${issueNumber}")
+
+                        navController.navigate("issueDetail") {
                             popUpTo(Screen.IssueList.route)
                         }
                     }
+
                 )
             }
             composable(Screen.UserList.route) { UserList() }
             composable(Screen.RepositoryList.route) { RepositoryList() }
-            composable(Screen.IssueDetail.route) { IssueDetail(onClickForNav = {navController.popBackStack()})}
+            composable(Screen.IssueDetail.route) {
+                val owner: String = navController.previousBackStackEntry?.savedStateHandle?.get<String>("owner")?:""
+                val repo: String = navController.previousBackStackEntry?.savedStateHandle?.get<String>("repo")?:""
+                val issueNumber: Int = navController.previousBackStackEntry?.savedStateHandle?.get<Int>("issueNumber")?:0
+                Log.d("onclicktest-nav-detail", "${owner}/${repo}/${issueNumber}")
+
+                IssueDetail(
+                    onClickForNav = { navController.popBackStack()},
+                    owner = owner,
+                    repo = repo,
+                    issueNumber = issueNumber
+                )
+            }
         }
     }
 

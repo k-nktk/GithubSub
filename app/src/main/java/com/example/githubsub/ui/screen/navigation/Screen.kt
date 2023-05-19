@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(val route: String, val icon: ImageVector?, val name: String) {
     object IssueList: Screen(route = "issueList", icon = Icons.Filled.Adjust, name = "Issue")
-    object IssueDetail: Screen(route = "issueDetail", icon = null, name = "IssueDetail")
+    object IssueDetail: Screen(route = "issueDetail", icon = null, name = "issueDetail")
     object UserList: Screen(route = "userList", icon = Icons.Filled.Person, name = "User")
     object RepositoryList: Screen(route = "repositoryList", icon = Icons.Filled.Book, name = "Repository")
 }

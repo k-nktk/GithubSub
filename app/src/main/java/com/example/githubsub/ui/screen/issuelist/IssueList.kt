@@ -11,10 +11,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,20 +19,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
-import coil.transform.CircleCropTransformation
-import com.example.githubsub.ui.screen.ObserveLifecycleEvent
 import com.example.githubsub.ui.theme.GithubSubTheme
 
 @Composable
@@ -43,18 +34,21 @@ import com.example.githubsub.ui.theme.GithubSubTheme
 fun IssueList(
     viewModel: IssueListViewModel = hiltViewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onClickForNav: () -> Unit = {}
+    onClickForNav: (String, String, Int) -> Unit = { owner: String, repo: String, issueNumber: Int -> },
 ) {
-    ObserveLifecycleEvent { event ->
-        // 検出したイベントに応じた処理を実装する。
-        when (event) {
-            Lifecycle.Event.ON_CREATE -> {
-                viewModel.fetchIssue()
-            }
-            else -> {}
-        }
-    }
+//    ObserveLifecycleEvent { event ->
+//        // 検出したイベントに応じた処理を実装する。
+//        when (event) {
+//            Lifecycle.Event.ON_CREATE -> {
+//                viewModel.fetchIssue()
+//            }
+//            else -> {}
+//        }
+//    }
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchIssue()
+    }
     val focusRequester = remember { FocusRequester() }
     val state by viewModel.state.collectAsState()
 
@@ -81,7 +75,14 @@ fun IssueList(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(2.dp)
-                            .clickable(onClick = onClickForNav),
+                            .clickable(onClick = {
+                                Log.d("onclicktest", "${it.user}/${it.repositoryTitle}/${it.issueNumber}")
+                                onClickForNav(
+                                    it.user,
+                                    it.repositoryTitle,
+                                    it.issueNumber
+                                )
+                            }),
                         backgroundColor = MaterialTheme.colors.background,
                         elevation = 8.dp
                     ) {

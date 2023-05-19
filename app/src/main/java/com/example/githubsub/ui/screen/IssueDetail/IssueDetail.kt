@@ -1,5 +1,6 @@
 package com.example.githubsub.ui.screen.IssueDetail
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +12,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,20 +27,27 @@ import javax.inject.Inject
 @Composable
 fun IssueDetail(
     viewModel: IssueDetailViewModel = hiltViewModel(),
-    onClickForNav: () -> Unit = {}
+    onClickForNav: () -> Unit = {},
+    owner: String,
+    repo: String,
+    issueNumber: Int
 ) {
-    ObserveLifecycleEvent { event ->
-        // 検出したイベントに応じた処理を実装する。
-        when (event) {
-            Lifecycle.Event.ON_CREATE -> {
-                viewModel.getIssueDetail()
-            }
-            else -> {}
-        }
-    }
+//    ObserveLifecycleEvent { event ->
+//        // 検出したイベントに応じた処理を実装する。
+//        when (event) {
+//            Lifecycle.Event.ON_CREATE -> {
+//                viewModel.getIssueDetail()
+//            }
+//            else -> {}
+//        }
+//    }
 
     val state by viewModel.state.collectAsState()
+    LaunchedEffect(Unit) {
+        Log.d("onclicktest", "${owner}/${repo}/${issueNumber}")
 
+        viewModel.getIssueDetail(owner, repo, issueNumber)
+    }
 
     GithubSubTheme {
         Column() {
