@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.githubsub.ui.screen.IssueDetail.IssueDetail
 import com.example.githubsub.ui.screen.issuelist.IssueList
 import com.example.githubsub.ui.screen.repositorylist.RepositoryList
 import com.example.githubsub.ui.screen.userlist.UserList
@@ -58,10 +59,18 @@ fun NavigationHost(
         }
     ) { innerPadding ->
         NavHost(navController, startDestination = startDestination, Modifier.padding(innerPadding)) {
-            composable(Screen.IssueList.route) { IssueList(onClickForNav = {navController.navigate(Screen.IssueDetail.route)}) }
+            composable(Screen.IssueList.route) {
+                IssueList(
+                    onClickForNav = {
+                        navController.navigate(Screen.IssueDetail.route){
+                            popUpTo(Screen.IssueList.route)
+                        }
+                    }
+                )
+            }
             composable(Screen.UserList.route) { UserList() }
             composable(Screen.RepositoryList.route) { RepositoryList() }
-            composable(Screen.IssueDetail.route) { }
+            composable(Screen.IssueDetail.route) { IssueDetail(onClickForNav = {navController.popBackStack()})}
         }
     }
 

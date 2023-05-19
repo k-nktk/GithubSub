@@ -1,12 +1,7 @@
 package com.example.githubsub.repository
-import com.example.githubsub.model.SearchRepositoryItem
-import com.example.githubsub.model.SearchedIssue
-import com.example.githubsub.model.SearchedRepository
-import com.example.githubsub.model.SearchedUser
+import com.example.githubsub.model.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
-import retrofit2.http.Url
+import retrofit2.http.*
 
 //APIの定義
 interface GithubInterface {
@@ -22,4 +17,8 @@ interface GithubInterface {
 
     @GET
     fun getIssueRepository(@Url url: String, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String): Call<SearchRepositoryItem>
+
+    @Headers ("Accept: application/vnd.github+json")
+    @GET
+    fun getIssueDetail(@Url url: String, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String): Call<List<SearchedIssueDetail>>
 }

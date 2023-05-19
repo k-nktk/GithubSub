@@ -75,7 +75,6 @@ fun IssueList(
                 title = { Text(text = "Issues") }
             )
             LazyColumn {
-//                items(state.searchedContent.)
                 items(state.issueListContent) {
                     Card(
                         shape = MaterialTheme.shapes.medium,

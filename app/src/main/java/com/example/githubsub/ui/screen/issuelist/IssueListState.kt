@@ -7,11 +7,6 @@ import com.example.githubsub.model.SearchedUser
 
 data class IssueListState(
     val issueListContent: List<IssueListItem>,
-//    val searchedRepository: SearchedRepository
-//    val searchedContent: Map<SearchedIssue, SearchedRepository>
-//    val issueTitle: String,
-//    val label: List<Label>,
-
 ) {
     companion object {
         val initValue = IssueListState(

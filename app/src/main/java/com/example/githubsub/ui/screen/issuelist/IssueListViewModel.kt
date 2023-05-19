@@ -67,7 +67,7 @@ class IssueListViewModel @Inject constructor(
             Log.d("test4", query)
 
             val result: MutableList<IssueListItem> = mutableListOf()
-            repository.searchIssue("user:$query", 10, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { issueResponse ->
+            repository.searchIssue("user:$query", 3, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { issueResponse ->
 //                Log.d("test2", response.toString())
                 if (issueResponse.isSuccessful) {
                     issueResponse.body()!!.items.map {
