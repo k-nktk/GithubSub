@@ -14,7 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RepositoryListViewModel @Inject constructor(): ViewModel(){
+class RepositoryListViewModel @Inject constructor(
+    private val repository: GithubRepository
+): ViewModel(){
 
     private val _state = MutableStateFlow(RepositoryListState.initValue)
     val state = _state.asStateFlow()
@@ -23,11 +25,6 @@ class RepositoryListViewModel @Inject constructor(): ViewModel(){
     private fun updateState(newState: () -> RepositoryListState) {
         _state.value = newState()
     }
-
-    //API
-    //Todo: Inject
-//    private val provider: GithubRetrofitProvider = GithubRetrofitProvider()
-    private val repository: GithubRepository = GithubRepository()
 
     //リポジトリを検索
     fun searchRepository() {

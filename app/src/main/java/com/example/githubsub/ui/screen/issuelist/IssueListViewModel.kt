@@ -24,7 +24,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IssueListViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val projectRepository: GithubRepository,
+    private val issueRepository: GithubIssue
 ): ViewModel(){
 
     private val _state = MutableStateFlow(IssueListState.initValue)
@@ -36,17 +38,10 @@ class IssueListViewModel @Inject constructor(
     }
 
     //API
-    //Todo: Inject
-//    private val provider: GithubRetrofitProvider = GithubRetrofitProvider()
-    private val repository: GithubIssue = GithubIssue()
-    private val searchedRepository: GithubRepository = GithubRepository()
 
 
     //  get data from data store
     fun fetchIssue() {
-        val oldState = currentState()
-
-
         viewModelScope.launch(Dispatchers.Main) {
             // MainUserのDataStoreからの取得
             var query: String = ""
@@ -58,19 +53,18 @@ class IssueListViewModel @Inject constructor(
                         }
                     }
                     is Result.Error -> {
-
                     }
                 }
             }
             Log.d("test4", query)
 
             val result: MutableList<IssueListItem> = mutableListOf()
-            repository.searchIssue("user:$query", 3, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { issueResponse ->
+            issueRepository.searchIssue("user:$query", 10, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { issueResponse ->
 //                Log.d("test2", response.toString())
                 if (issueResponse.isSuccessful) {
                     issueResponse.body()!!.items.map {
                         issueItem ->
-                        searchedRepository.searchIssueRepository(issueItem.repositoryUrl, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also {
+                        projectRepository.searchIssueRepository(issueItem.repositoryUrl, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also {
                             repositoryResponse ->
                             if (repositoryResponse.isSuccessful) {
                                 result.add(

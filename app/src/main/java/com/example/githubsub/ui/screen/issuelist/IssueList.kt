@@ -27,14 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
+import com.example.githubsub.model.Label
 import com.example.githubsub.ui.theme.GithubSubTheme
 
 @Composable
-@Preview
 fun IssueList(
     viewModel: IssueListViewModel = hiltViewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onClickForNav: (String, String, Int) -> Unit = { owner: String, repo: String, issueNumber: Int -> },
+    onClickForNav: (String, String, Int, String, String, List<Label>) -> Unit = {
+            owner: String, repo: String, issueNumber: Int, ownerImageUrl: String, issueTitle: String, issueLabel: List<Label> -> },
 ) {
 //    ObserveLifecycleEvent { event ->
 //        // 検出したイベントに応じた処理を実装する。
@@ -68,77 +69,98 @@ fun IssueList(
             TopAppBar(
                 title = { Text(text = "Issues") }
             )
-            LazyColumn {
-                items(state.issueListContent) {
-                    Card(
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(2.dp)
-                            .clickable(onClick = {
-                                Log.d("onclicktest", "${it.user}/${it.repositoryTitle}/${it.issueNumber}")
-                                onClickForNav(
-                                    it.user,
-                                    it.repositoryTitle,
-                                    it.issueNumber
-                                )
-                            }),
-                        backgroundColor = MaterialTheme.colors.background,
-                        elevation = 8.dp
-                    ) {
+            if (state.issueListContent.isEmpty()) {
+                Column(
+                    Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Text(
+                        "現在Issueはありません",
+                        style = MaterialTheme.typography.h4
+                    )
+                }
 
-                        Row() {
-                            AsyncImage(
-                                model = it.avatarUrl,
-                                contentDescription = null,
-                                Modifier
-                                    .clip(CircleShape)
-                                    .size(40.dp)
-                            )
-                            Column(
-                                Modifier
-                                    .padding(8.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Row() {
-                                    Text(
-                                        text = it.user,
-                                        style = MaterialTheme.typography.body2,
-                                        fontWeight = FontWeight.Bold
+            } else {
+                LazyColumn {
+                    items(state.issueListContent) {
+                        Card(
+                            shape = MaterialTheme.shapes.medium,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(2.dp)
+                                .clickable(onClick = {
+                                    Log.d(
+                                        "onclicktest",
+                                        "${it.user}/${it.repositoryTitle}/${it.issueNumber}"
                                     )
-                                    Text(
-                                        text = "・${it.repositoryTitle}",
-                                        style = MaterialTheme.typography.body2,
-                                        fontWeight = FontWeight.Bold
+                                    onClickForNav(
+                                        it.user,
+                                        it.repositoryTitle,
+                                        it.issueNumber,
+                                        it.avatarUrl,
+                                        it.issueTitle,
+                                        it.labels
                                     )
-                                }
-                                Text(
-                                    text = it.issueTitle,
-                                    style = MaterialTheme.typography.subtitle1
-                                )
-                                Row(
+                                }),
+                            backgroundColor = MaterialTheme.colors.background,
+                            elevation = 8.dp
+                        ) {
+
+                            Row() {
+                                AsyncImage(
+                                    model = it.avatarUrl,
+                                    contentDescription = null,
                                     Modifier
-                                        .height(16.dp)
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End,
-                                    verticalAlignment = Alignment.CenterVertically
+                                        .clip(CircleShape)
+                                        .size(40.dp)
+                                        .padding(4.dp)
+                                )
+                                Column(
+                                    Modifier
+                                        .padding(8.dp)
+                                        .fillMaxWidth()
                                 ) {
                                     Row() {
-                                        viewModel.provideLabelColor(it.labels).map {
-                                            Canvas(
-                                                modifier = Modifier
-                                                    .padding(horizontal = 1.dp)
-                                                    .size(16.dp),
-                                            ) {
-                                                if (it == Color(0xffffffff)) {
-                                                    drawCircle(
-                                                        color = Color.Black,
-                                                        style = Stroke(width = 1.0f)
-                                                    )
-                                                } else {
-                                                    drawCircle(
-                                                        color = it
-                                                    )
+                                        Text(
+                                            text = it.user,
+                                            style = MaterialTheme.typography.body2,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Text(
+                                            text = "・${it.repositoryTitle}",
+                                            style = MaterialTheme.typography.body2,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                    Text(
+                                        text = it.issueTitle,
+                                        style = MaterialTheme.typography.subtitle1
+                                    )
+                                    Row(
+                                        Modifier
+                                            .height(16.dp)
+                                            .fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Row() {
+                                            viewModel.provideLabelColor(it.labels).map {
+                                                Canvas(
+                                                    modifier = Modifier
+                                                        .padding(horizontal = 1.dp)
+                                                        .size(16.dp),
+                                                ) {
+                                                    if (it == Color(0xffffffff)) {
+                                                        drawCircle(
+                                                            color = Color.Black,
+                                                            style = Stroke(width = 1.0f)
+                                                        )
+                                                    } else {
+                                                        drawCircle(
+                                                            color = it
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }

@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -13,8 +14,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.githubsub.model.Label
 import com.example.githubsub.ui.screen.IssueDetail.IssueDetail
 import com.example.githubsub.ui.screen.issuelist.IssueList
+import com.example.githubsub.ui.screen.issuelist.IssueListViewModel
 import com.example.githubsub.ui.screen.repositorylist.RepositoryList
 import com.example.githubsub.ui.screen.userlist.UserList
 
@@ -63,11 +66,14 @@ fun NavigationHost(
             composable(Screen.IssueList.route) {
                 IssueList (
                     onClickForNav = {
-                            owner, repo, issueNumber ->
+                            owner, repo, issueNumber, ownerImageUrl, issueTitle, issueLabel ->
                             navController.currentBackStackEntry?.run {
                                 savedStateHandle["owner"] = owner
                                 savedStateHandle["repo"] = repo
                                 savedStateHandle["issueNumber"] = issueNumber
+                                savedStateHandle["imageUrl"] = ownerImageUrl
+                                savedStateHandle["issueTitle"] = issueTitle
+                                savedStateHandle["issueLabel"] = issueLabel
                             }
                         Log.d("onclicktest-nav-detail", "${owner}/${repo}/${issueNumber}")
 
@@ -75,7 +81,6 @@ fun NavigationHost(
                             popUpTo(Screen.IssueList.route)
                         }
                     }
-
                 )
             }
             composable(Screen.UserList.route) { UserList() }
@@ -84,13 +89,20 @@ fun NavigationHost(
                 val owner: String = navController.previousBackStackEntry?.savedStateHandle?.get<String>("owner")?:""
                 val repo: String = navController.previousBackStackEntry?.savedStateHandle?.get<String>("repo")?:""
                 val issueNumber: Int = navController.previousBackStackEntry?.savedStateHandle?.get<Int>("issueNumber")?:0
+                val ownerImageUrl: String = navController.previousBackStackEntry?.savedStateHandle?.get<String>("imageUrl")?:""
+                val issueTitle: String = navController.previousBackStackEntry?.savedStateHandle?.get<String>("issueTitle")?:""
+                val issueLabel: List<Label> = navController.previousBackStackEntry?.savedStateHandle?.get<List<Label>>("issueLabel")?: mutableListOf()
+
                 Log.d("onclicktest-nav-detail", "${owner}/${repo}/${issueNumber}")
 
                 IssueDetail(
                     onClickForNav = { navController.popBackStack()},
                     owner = owner,
                     repo = repo,
-                    issueNumber = issueNumber
+                    issueNumber = issueNumber,
+                    ownerImageUrl = ownerImageUrl,
+                    issueTitle = issueTitle,
+                    issueLabel = issueLabel
                 )
             }
         }

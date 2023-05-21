@@ -19,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserListViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val repository: GithubUser
 ): ViewModel(){
 
     private val _state = MutableStateFlow(UserListState.initValue)
@@ -30,12 +31,6 @@ class UserListViewModel @Inject constructor(
         _state.value = newState()
     }
 
-    //API
-    //Todo: Inject
-//    private val provider: GithubRetrofitProvider = GithubRetrofitProvider()
-    private val repository: GithubUser = GithubUser()
-
-    //リポジトリを検索
     fun searchUser() {
         val query = this.state.value.query
         viewModelScope.launch(Dispatchers.Main) {

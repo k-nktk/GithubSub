@@ -17,7 +17,6 @@ class GithubIssueDetail @Inject constructor(): IGithubIssueDetail {
         val retrofit = GithubRetrofitProvider().retrofit
     }
 
-    @Inject
     override suspend fun searchIssueDetail(owner: String, repo: String, issueNumber: Int, clientID: String, clientSecret: String) : Response<List<SearchedIssueDetail>> = withContext(
         Dispatchers.IO){
         val service = retrofit.create(GithubInterface::class.java)
