@@ -33,20 +33,9 @@ import com.example.githubsub.ui.theme.GithubSubTheme
 @Composable
 fun IssueList(
     viewModel: BaseIssueListViewModel = hiltViewModel<IssueListViewModel>(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onClickForNav: (String, String, Int, String, String, List<Label>) -> Unit = {
             owner: String, repo: String, issueNumber: Int, ownerImageUrl: String, issueTitle: String, issueLabel: List<Label> -> },
 ) {
-//    ObserveLifecycleEvent { event ->
-//        // 検出したイベントに応じた処理を実装する。
-//        when (event) {
-//            Lifecycle.Event.ON_CREATE -> {
-//                viewModel.fetchIssue()
-//            }
-//            else -> {}
-//        }
-//    }
-
     LaunchedEffect(Unit) {
         viewModel.fetchIssue()
     }
@@ -69,7 +58,7 @@ fun IssueList(
             TopAppBar(
                 title = { Text(text = "Issues") }
             )
-            if (state.issueListContent.isEmpty()) {
+            if (state.issueList.isEmpty()) {
                 Column(
                     Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -83,7 +72,7 @@ fun IssueList(
 
             } else {
                 LazyColumn {
-                    items(state.issueListContent) {
+                    items(state.issueList) {
                         Card(
                             shape = MaterialTheme.shapes.medium,
                             modifier = Modifier
@@ -92,15 +81,15 @@ fun IssueList(
                                 .clickable(onClick = {
                                     Log.d(
                                         "onclicktest",
-                                        "${it.user}/${it.repositoryTitle}/${it.issueNumber}"
+                                        "${it.user}/${it.projectTitle}/${it.issueNumber}"
                                     )
                                     onClickForNav(
                                         it.user,
-                                        it.repositoryTitle,
+                                        it.projectTitle,
                                         it.issueNumber,
-                                        it.avatarUrl,
+                                        it.imageUrl,
                                         it.issueTitle,
-                                        it.labels
+                                        it.labelList
                                     )
                                 }),
                             backgroundColor = MaterialTheme.colors.background,
@@ -109,7 +98,7 @@ fun IssueList(
 
                             Row() {
                                 AsyncImage(
-                                    model = it.avatarUrl,
+                                    model = it.imageUrl,
                                     contentDescription = null,
                                     Modifier
                                         .clip(CircleShape)
@@ -128,7 +117,7 @@ fun IssueList(
                                             fontWeight = FontWeight.Bold
                                         )
                                         Text(
-                                            text = "・${it.repositoryTitle}",
+                                            text = "・${it.projectTitle}",
                                             style = MaterialTheme.typography.body2,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -145,7 +134,7 @@ fun IssueList(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Row() {
-                                            viewModel.provideLabelColor(it.labels).map {
+                                            viewModel.provideLabelColor(it.labelList).map {
                                                 Canvas(
                                                     modifier = Modifier
                                                         .padding(horizontal = 1.dp)

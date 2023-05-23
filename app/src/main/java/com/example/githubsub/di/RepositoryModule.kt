@@ -1,13 +1,11 @@
 package com.example.githubsub.di
 
-import com.example.githubsub.repository.datastore.DataStoreRepository
-import com.example.githubsub.repository.datastore.IDataStoreRepository
-import com.example.githubsub.repository.issue.GithubIssue
-import com.example.githubsub.repository.issue.IGithubIssue
-import com.example.githubsub.repository.issuedetail.GithubIssueDetail
-import com.example.githubsub.repository.issuedetail.IGithubIssueDetail
-import com.example.githubsub.repository.repository.GithubRepository
-import com.example.githubsub.repository.repository.IGithubRepository
+import com.example.githubsub.repository.issue.GithubIssueRepository
+import com.example.githubsub.repository.issue.IGithubIssueRepository
+import com.example.githubsub.repository.issuedetail.GithubIssueDetailRepository
+import com.example.githubsub.repository.issuedetail.IGithubIssueDetailRepository
+import com.example.githubsub.repository.repository.GithubProjectRepository
+import com.example.githubsub.repository.repository.IGithubProjectRepository
 import com.example.githubsub.repository.user.GithubUser
 import com.example.githubsub.repository.user.IGithubUser
 import dagger.Binds
@@ -21,15 +19,15 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindIssueRepository(githubIssue: GithubIssue): IGithubIssue
+    abstract fun bindIssueRepository(githubIssue: GithubIssueRepository): IGithubIssueRepository
 
     @Binds
     @Singleton
-    abstract fun bindIssueDetailRepository(githubIssueDetail: GithubIssueDetail): IGithubIssueDetail
+    abstract fun bindIssueDetailRepository(githubIssueDetail: GithubIssueDetailRepository): IGithubIssueDetailRepository
 
     @Binds
     @Singleton
-    abstract fun bindGithubRepository(githubRepository: GithubRepository): IGithubRepository
+    abstract fun bindGithubRepository(githubRepository: GithubProjectRepository): IGithubProjectRepository
 
     @Binds
     @Singleton

@@ -1,12 +1,11 @@
 package com.example.githubsub.ui.screen.userlist
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubsub.BuildConfig
-import com.example.githubsub.model.SearchUserItem
-import com.example.githubsub.model.SearchedUser
+import com.example.githubsub.model.UserItem
+import com.example.githubsub.model.UserList
 import com.example.githubsub.repository.datastore.DataStoreRepository
 import com.example.githubsub.repository.user.GithubUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +41,7 @@ class UserListViewModel @Inject constructor(
     }
 
     override fun searchUser() {
-        val query = this.state.value.query
+        val query = this.state.value.userName
         viewModelScope.launch(Dispatchers.Main) {
             repository.searchUser(query, 5, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { response ->
                 if (response.isSuccessful) {
@@ -57,7 +56,7 @@ class UserListViewModel @Inject constructor(
     //  push data to proto data store
     override fun pushMainUser() {
         viewModelScope.launch(Dispatchers.Main) {
-            dataStoreRepository.writeUserResult(state.value.query)
+            dataStoreRepository.writeUserResult(state.value.userName)
         }
     }
 
@@ -69,13 +68,13 @@ class UserListViewModel @Inject constructor(
             when(val result = dataStoreRepository.getUserResult()) {
                 is com.example.githubsub.repository.datastore.Result.Success -> {
                     if (!result.data.user.isNullOrEmpty()) {
-                        updateState { oldState.copy(query = oldState.query, searchedUser = oldState.searchedUser, mainUser = result.data.user) }
+                        updateState { oldState.copy(userName = oldState.userName, userList = oldState.userList, mainUser = result.data.user) }
                     } else {
-                        updateState { oldState.copy(query = oldState.query, searchedUser = oldState.searchedUser, mainUser = "ユーザーが登録されていません。") }
+                        updateState { oldState.copy(userName = oldState.userName, userList = oldState.userList, mainUser = "ユーザーが登録されていません。") }
                     }
                 }
                 is com.example.githubsub.repository.datastore.Result.Error -> {
-                    updateState { oldState.copy(query = oldState.query, searchedUser = oldState.searchedUser, mainUser = "Error") }
+                    updateState { oldState.copy(userName = oldState.userName, userList = oldState.userList, mainUser = "Error") }
 
                 }
             }
@@ -85,28 +84,28 @@ class UserListViewModel @Inject constructor(
     // UI
     override fun setQuery(query: String) {
         val oldState = currentState()
-        updateState { oldState.copy(query = query, searchedUser = oldState.searchedUser, mainUser = oldState.mainUser) }
+        updateState { oldState.copy(userName = query, userList = oldState.userList, mainUser = oldState.mainUser) }
     //    Todo: change copy(const) to copy(proceeding = true)
     }
 
-    private fun setResult(response: SearchedUser) {
+    private fun setResult(response: UserList) {
         val oldState = currentState()
-        updateState { oldState.copy(query = oldState.query, searchedUser = response, mainUser = oldState.mainUser) }
+        updateState { oldState.copy(userName = oldState.userName, userList = response, mainUser = oldState.mainUser) }
     }
 
     override fun setMainUser(mainUser: String) {
         val oldState = currentState()
-        updateState { oldState.copy(query = oldState.query, searchedUser = oldState.searchedUser, mainUser = mainUser) }
+        updateState { oldState.copy(userName = oldState.userName, userList = oldState.userList, mainUser = mainUser) }
     }
 }
 
 class PreviewUserListViewModel : BaseUserListViewModel() {
     override val state: StateFlow<UserListState> = MutableStateFlow(
         UserListState(
-            query = "test_query",
-            searchedUser = SearchedUser(mutableListOf(SearchUserItem(
+            userName = "test_query",
+            userList = UserList(mutableListOf(UserItem(
                 id = 0,
-                name = "test_user_name",
+                login = "test_user_name",
                 imageUrl = ""
             ))),
             mainUser = "test_main_user",

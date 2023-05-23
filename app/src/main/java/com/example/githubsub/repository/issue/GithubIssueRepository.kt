@@ -1,8 +1,7 @@
 package com.example.githubsub.repository.issue
 
 
-import com.example.githubsub.model.SearchedIssue
-import com.example.githubsub.model.SearchedRepository
+import com.example.githubsub.model.IssueList
 import com.example.githubsub.repository.GithubInterface
 import com.example.githubsub.repository.GithubRetrofitProvider
 import kotlinx.coroutines.Dispatchers
@@ -13,14 +12,14 @@ import javax.inject.Singleton
 
 //検索API
 @Singleton
-class GithubIssue @Inject constructor(): IGithubIssue {
+class GithubIssueRepository @Inject constructor(): IGithubIssueRepository {
     companion object {
         val retrofit = GithubRetrofitProvider().retrofit
     }
 
-    override suspend fun searchIssue(query: String, page: Int, clientID: String, clientSecret: String) : Response<SearchedIssue> = withContext(Dispatchers.IO){
+    override suspend fun searchIssue(userName: String, page: Int, clientID: String, clientSecret: String) : Response<IssueList> = withContext(Dispatchers.IO){
         val service = retrofit.create(GithubInterface::class.java)
-        return@withContext service.getSearchIssues(query, page, clientID, clientSecret).execute()
+        return@withContext service.searchIssues(userName, page, clientID, clientSecret).execute()
     }
 
 }

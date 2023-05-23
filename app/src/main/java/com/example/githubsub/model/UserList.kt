@@ -2,12 +2,12 @@ package com.example.githubsub.model
 
 import com.squareup.moshi.Json
 
-data class SearchedUser(
-    val items: List<SearchUserItem>
+data class UserList(
+    val items: List<UserItem>
 )
 
-data class SearchUserItem(
+data class UserItem(
     val id: Int,
-    @Json(name = "login") val name: String,
+    @Json(name = "login") val login: String,
     @Json(name = "avatar_url") val imageUrl: String
 )

@@ -7,18 +7,18 @@ import retrofit2.http.*
 interface GithubInterface {
 
     @GET("/search/repositories")
-    fun getSearchRepositories(@Query("q") query: String, @Query("per_page") page: Int, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String) : Call<SearchedRepository>
+    fun searchProjects(@Query("q") projectName: String, @Query("per_page") page: Int, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String) : Call<ProjectList>
 
     @GET("/search/users")
-    fun getSearchUsers(@Query("q") query: String, @Query("per_page") page: Int, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String) : Call<SearchedUser>
+    fun searchUsers(@Query("q") userName: String, @Query("per_page") page: Int, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String) : Call<UserList>
 
     @GET("/search/issues")
-    fun getSearchIssues(@Query("q") query: String, @Query("per_page") page: Int, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String) : Call<SearchedIssue>
+    fun searchIssues(@Query("q") userName: String, @Query("per_page") page: Int, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String) : Call<IssueList>
 
     @GET
-    fun getIssueRepository(@Url url: String, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String): Call<SearchRepositoryItem>
+    fun getIssuesProject(@Url url: String, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String): Call<ProjectItem>
 
     @Headers ("Accept: application/vnd.github+json")
     @GET
-    fun getIssueDetail(@Url url: String, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String): Call<List<SearchedIssueDetail>>
+    fun getIssueDetail(@Url url: String, @Query("client_id") clientID: String, @Query("client_secret")clientSecret: String): Call<List<IssueDetail>>
 }

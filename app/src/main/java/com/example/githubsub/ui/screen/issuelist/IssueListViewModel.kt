@@ -1,24 +1,17 @@
 package com.example.githubsub.ui.screen.issuelist
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.Label
-import com.example.githubsub.model.SearchedIssue
-import com.example.githubsub.model.SearchedRepository
-import com.example.githubsub.model.User
 import com.example.githubsub.repository.datastore.DataStoreRepository
 import com.example.githubsub.repository.datastore.Result
-import com.example.githubsub.repository.issue.GithubIssue
-import com.example.githubsub.repository.repository.GithubRepository
-import com.example.githubsub.repository.user.GithubUser
-import com.example.githubsub.ui.screen.IssueDetail.IssueDetailState
+import com.example.githubsub.repository.issue.GithubIssueRepository
+import com.example.githubsub.repository.repository.GithubProjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,8 +28,8 @@ abstract class BaseIssueListViewModel: ViewModel() {
 @HiltViewModel
 class IssueListViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
-    private val projectRepository: GithubRepository,
-    private val issueRepository: GithubIssue
+    private val projectRepository: GithubProjectRepository,
+    private val issueRepository: GithubIssueRepository
 ): BaseIssueListViewModel() {
 
     private val _state = MutableStateFlow(IssueListState.initValue)
@@ -54,37 +47,37 @@ class IssueListViewModel @Inject constructor(
     override fun fetchIssue() {
         viewModelScope.launch(Dispatchers.Main) {
             // MainUserのDataStoreからの取得
-            var query: String = ""
+            var mainUser = ""
             withContext(Dispatchers.Default) {
                 when (val result = dataStoreRepository.getUserResult()) {
                     is Result.Success -> {
                         if (!result.data.user.isNullOrEmpty()) {
-                            query = result.data.user
+                            mainUser = result.data.user
                         }
                     }
                     is Result.Error -> {
                     }
                 }
             }
-            Log.d("test4", query)
+            Log.d("test4", mainUser)
 
             val result: MutableList<IssueListItem> = mutableListOf()
-            issueRepository.searchIssue("user:$query", 10, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { issueResponse ->
+            issueRepository.searchIssue("user:$mainUser", 10, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { issueResponse ->
 //                Log.d("test2", response.toString())
                 if (issueResponse.isSuccessful) {
                     issueResponse.body()!!.items.map {
                         issueItem ->
-                        projectRepository.searchIssueRepository(issueItem.repositoryUrl, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also {
+                        projectRepository.searchIssueProject(issueItem.repositoryUrl, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also {
                             repositoryResponse ->
                             if (repositoryResponse.isSuccessful) {
                                 result.add(
                                     IssueListItem(
                                         issueNumber =issueItem.number,
                                         issueTitle = issueItem.title,
-                                        repositoryTitle = repositoryResponse.body()!!.name,
+                                        projectTitle = repositoryResponse.body()!!.name,
                                         user = issueItem.user.login,
-                                        avatarUrl = issueItem.user.imageUrl,
-                                        labels = issueItem.label,
+                                        imageUrl = issueItem.user.imageUrl,
+                                        labelList = issueItem.label,
                                     )
                                 )
                             }
@@ -101,7 +94,7 @@ class IssueListViewModel @Inject constructor(
     private fun setResult(issueListContent: List<IssueListItem>) {
         val oldState = currentState()
 //        updateState { oldState.copy(searchedIssue = issueResponse, searchedRepository = repositoryResponse) }
-        updateState { oldState.copy(issueListContent = issueListContent) }
+        updateState { oldState.copy(issueList = issueListContent) }
 
     }
 
@@ -115,10 +108,10 @@ class PreviewIssueListViewModel() : BaseIssueListViewModel() {
         IssueListItem(
         issueNumber = 0,
         issueTitle = "test_issue_title",
-        repositoryTitle = "test_repository_title",
+        projectTitle = "test_repository_title",
         user = "test_user_name",
-        avatarUrl = "",
-        labels = mutableListOf(Label(id = 0, name = "bug", color = "FFFFFF"))
+        imageUrl = "",
+        labelList = mutableListOf(Label(id = 0, name = "bug", color = "FFFFFF"))
         )
     )))
 

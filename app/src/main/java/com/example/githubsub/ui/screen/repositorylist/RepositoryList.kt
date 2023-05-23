@@ -21,14 +21,14 @@ fun RepositoryList(
             title = { Text(text = "Repository") }
         )
         TextField(
-            value = state.query,
+            value = state.projectName,
             onValueChange = {
                 viewModel.setQuery(it)
                 viewModel.searchRepository()
             }
         )
         LazyColumn {
-            items(state.searchResponse.items) {
+            items(state.projectList.items) {
                 Text(text = it.fullName)
             }
         }

@@ -6,12 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.Label
-import com.example.githubsub.model.SearchedIssueDetail
-import com.example.githubsub.model.User
-import com.example.githubsub.repository.issuedetail.GithubIssueDetail
-import com.example.githubsub.ui.screen.issuelist.IssueListItem
-import com.example.githubsub.ui.screen.issuelist.IssueListState
-import com.example.githubsub.ui.screen.navigation.Screen
+import com.example.githubsub.model.UserItem
+import com.example.githubsub.repository.issuedetail.GithubIssueDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +24,7 @@ abstract class BaseIssueDetailViewModel: ViewModel() {
 
 @HiltViewModel
 class IssueDetailViewModel @Inject constructor(
-    private val repository: GithubIssueDetail
+    private val repository: GithubIssueDetailRepository
 ): BaseIssueDetailViewModel() {
 
     private val _state = MutableStateFlow(IssueDetailState.initValue)
@@ -45,7 +41,7 @@ class IssueDetailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Main) {
             repository.searchIssueDetail(
                 owner = owner,
-                repo = repo,
+                projectName = repo,
                 issueNumber = issueNumber,
                 clientID = BuildConfig.CLIENT_ID,
                 clientSecret = BuildConfig.CLIENT_SECRET
@@ -75,7 +71,7 @@ class IssueDetailViewModel @Inject constructor(
 
 class PreviewIssueDetailViewModel: BaseIssueDetailViewModel() {
     override val state: StateFlow<IssueDetailState> = MutableStateFlow(
-            IssueDetailState(mutableListOf(CommentListItem("test_comment", User(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4"))))
+            IssueDetailState(mutableListOf(CommentListItem("test_comment", UserItem(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4"))))
     )
 
     override fun getIssueDetail(owner: String, repo: String, issueNumber: Int) {

@@ -1,6 +1,6 @@
 package com.example.githubsub.ui.screen.IssueDetail
 
-import com.example.githubsub.model.User
+import com.example.githubsub.model.UserItem
 
 data class IssueDetailState(
     val commentItems: List<CommentListItem>
@@ -13,5 +13,5 @@ data class IssueDetailState(
 
 data class CommentListItem(
     val comment: String,
-    val user: User
+    val user: UserItem
 )

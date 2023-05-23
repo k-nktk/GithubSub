@@ -1,16 +1,11 @@
 package com.example.githubsub.ui.screen.repositorylist
 
 import android.util.Log
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubsub.BuildConfig
-import com.example.githubsub.model.Label
-import com.example.githubsub.model.SearchedRepository
-import com.example.githubsub.model.User
-import com.example.githubsub.repository.repository.GithubRepository
-import com.example.githubsub.ui.screen.IssueDetail.CommentListItem
-import com.example.githubsub.ui.screen.IssueDetail.IssueDetailState
+import com.example.githubsub.model.ProjectList
+import com.example.githubsub.repository.repository.GithubProjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +22,7 @@ abstract class BaseRepositoryListViewModel: ViewModel() {
 
 @HiltViewModel
 class RepositoryListViewModel @Inject constructor(
-    private val repository: GithubRepository
+    private val repository: GithubProjectRepository
 ): BaseRepositoryListViewModel() {
 
     private val _state = MutableStateFlow(RepositoryListState.initValue)
@@ -40,9 +35,9 @@ class RepositoryListViewModel @Inject constructor(
 
     //リポジトリを検索
     override fun searchRepository() {
-        val query = this.state.value.query
+        val query = this.state.value.projectName
         viewModelScope.launch(Dispatchers.Main) {
-            repository.searchRepository(query, 5, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { response ->
+            repository.searchProject(query, 5, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET).also { response ->
                 if (response.isSuccessful) {
                     setResult(response.body()!!)
                 } else {
@@ -54,19 +49,19 @@ class RepositoryListViewModel @Inject constructor(
 
     override fun setQuery(query: String) {
         val oldState = currentState()
-        updateState { oldState.copy(query = query, searchResponse = oldState.searchResponse) }
+        updateState { oldState.copy(projectName = query, projectList = oldState.projectList) }
     }
 
-    private fun setResult(response: SearchedRepository) {
+    private fun setResult(response: ProjectList) {
         val oldState = currentState()
-        updateState { oldState.copy(query = oldState.query, searchResponse = response) }
+        updateState { oldState.copy(projectName = oldState.projectName, projectList = response) }
     }
 }
 
 class PreviewRepositoryListViewModel() : BaseRepositoryListViewModel() {
 
     override val state: StateFlow<RepositoryListState> = MutableStateFlow(
-        RepositoryListState("testQuery", SearchedRepository(mutableListOf()))
+        RepositoryListState("testQuery", ProjectList(mutableListOf()))
     )
     override fun searchRepository() {
         TODO("Not yet implemented")

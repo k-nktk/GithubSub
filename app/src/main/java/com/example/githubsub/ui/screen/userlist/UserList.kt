@@ -13,20 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusTarget
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
-import com.example.githubsub.ui.screen.ObserveLifecycleEvent
 
 @Composable
 fun UserList(
     viewModel: BaseUserListViewModel = hiltViewModel<UserListViewModel>(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
 
     LaunchedEffect(Unit) {
@@ -60,7 +55,7 @@ fun UserList(
         ) {
             TextField(
                 singleLine = true,
-                value = state.query,
+                value = state.userName,
                 label = { Text(text = "Github Username") },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -79,7 +74,7 @@ fun UserList(
         Text(text = state.mainUser)
 
         LazyColumn {
-            items(state.searchedUser.items) {
+            items(state.userList.items) {
                 Row(
                     Modifier
                         .height(40.dp)
@@ -92,7 +87,7 @@ fun UserList(
                         model = it.imageUrl,
                         contentDescription = null,
                     )
-                    Text(text = it.name)
+                    Text(text = it.login)
                 }
             }
         }
@@ -107,7 +102,7 @@ fun UserList(
                 TextButton(
                     onClick = {
                         showDialog = false
-                        viewModel.setMainUser(state.query)
+                        viewModel.setMainUser(state.userName)
                         viewModel.pushMainUser()
                     }
                 ) {
@@ -127,7 +122,7 @@ fun UserList(
                 Text("ユーザー設定")
             },
             text = {
-                Text("User${state.query}をデフォルトユーザーに設定します。")
+                Text("User${state.userName}をデフォルトユーザーに設定します。")
             },
         )
     }
