@@ -1,6 +1,7 @@
 package com.example.githubsub.ui.screen.issuelist
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,29 +9,38 @@ import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.Label
 import com.example.githubsub.model.SearchedIssue
 import com.example.githubsub.model.SearchedRepository
+import com.example.githubsub.model.User
 import com.example.githubsub.repository.datastore.DataStoreRepository
 import com.example.githubsub.repository.datastore.Result
 import com.example.githubsub.repository.issue.GithubIssue
 import com.example.githubsub.repository.repository.GithubRepository
 import com.example.githubsub.repository.user.GithubUser
+import com.example.githubsub.ui.screen.IssueDetail.IssueDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
+abstract class BaseIssueListViewModel: ViewModel() {
+    abstract val state: StateFlow<IssueListState>
+    abstract fun fetchIssue()
+    abstract fun provideLabelColor(label: List<Label>): List<Color>
+}
 
 @HiltViewModel
 class IssueListViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val projectRepository: GithubRepository,
     private val issueRepository: GithubIssue
-): ViewModel(){
+): BaseIssueListViewModel() {
 
     private val _state = MutableStateFlow(IssueListState.initValue)
-    val state = _state.asStateFlow()
+    override val state = _state.asStateFlow()
 
     private fun currentState() = _state.value
     private fun updateState(newState: () -> IssueListState) {
@@ -41,7 +51,7 @@ class IssueListViewModel @Inject constructor(
 
 
     //  get data from data store
-    fun fetchIssue() {
+    override fun fetchIssue() {
         viewModelScope.launch(Dispatchers.Main) {
             // MainUserのDataStoreからの取得
             var query: String = ""
@@ -95,8 +105,30 @@ class IssueListViewModel @Inject constructor(
 
     }
 
-    fun provideLabelColor(label: List<Label>): List<Color> {
+    override fun provideLabelColor(label: List<Label>): List<Color> {
         return label.map { Color(android.graphics.Color.parseColor("#" + it.color)) }
+    }
+}
+
+class PreviewIssueListViewModel() : BaseIssueListViewModel() {
+    override val state: StateFlow<IssueListState> = MutableStateFlow(IssueListState(mutableListOf(
+        IssueListItem(
+        issueNumber = 0,
+        issueTitle = "test_issue_title",
+        repositoryTitle = "test_repository_title",
+        user = "test_user_name",
+        avatarUrl = "",
+        labels = mutableListOf(Label(id = 0, name = "bug", color = "FFFFFF"))
+        )
+    )))
+
+    override fun fetchIssue() {
+        TODO("Not yet implemented")
+    }
+
+    override fun provideLabelColor(label: List<Label>): List<Color> {
+        return mutableListOf(Color(android.graphics.Color.parseColor("#FFFFFF")))
     }
 
 }
+

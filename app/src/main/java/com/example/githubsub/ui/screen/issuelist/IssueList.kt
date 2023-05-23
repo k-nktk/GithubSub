@@ -32,7 +32,7 @@ import com.example.githubsub.ui.theme.GithubSubTheme
 
 @Composable
 fun IssueList(
-    viewModel: IssueListViewModel = hiltViewModel(),
+    viewModel: BaseIssueListViewModel = hiltViewModel<IssueListViewModel>(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onClickForNav: (String, String, Int, String, String, List<Label>) -> Unit = {
             owner: String, repo: String, issueNumber: Int, ownerImageUrl: String, issueTitle: String, issueLabel: List<Label> -> },
@@ -173,5 +173,11 @@ fun IssueList(
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun PreviewIssueList() {
+    IssueList(viewModel = PreviewIssueListViewModel())
 }
 

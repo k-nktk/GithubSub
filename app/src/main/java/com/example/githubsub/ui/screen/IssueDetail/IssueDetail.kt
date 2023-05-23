@@ -35,7 +35,7 @@ import com.example.githubsub.ui.theme.GithubSubTheme
 
 @Composable
 fun IssueDetail(
-    viewModel: IssueDetailViewModel = hiltViewModel(),
+    viewModel: BaseIssueDetailViewModel = hiltViewModel<IssueDetailViewModel>(),
     onClickForNav: () -> Unit = {},
     owner: String,
     repo: String,
@@ -52,7 +52,7 @@ fun IssueDetail(
     }
 
     GithubSubTheme {
-        Column() {
+        Column(Modifier.fillMaxSize()) {
             TopAppBar(
                 title = { Text(text = issueTitle) },
                 navigationIcon = {
@@ -109,16 +109,10 @@ fun IssueDetail(
                                         .size(16.dp),
                                 ) {
                                     val labelColor = viewModel.provideLabelColor(it)
-                                    if (labelColor == Color(0xffffffff)) {
-                                        drawCircle(
-                                            color = Color.Black,
-                                            style = Stroke(width = 1.0f)
-                                        )
-                                    } else {
-                                        drawCircle(
-                                            color = labelColor
-                                        )
-                                    }
+                                    drawCircle(
+                                        color = labelColor
+                                    )
+//                                    }
                                 }
                                 Text(text = it.name, fontSize = 10.sp, modifier = Modifier.padding(horizontal = 1.dp))
 
@@ -148,6 +142,7 @@ fun IssueDetail(
 fun PreviewTestScreen() {
 //    TestScreen(user = User(id = "1", name = "tom"), count = 10)
     IssueDetail(
+        viewModel = PreviewIssueDetailViewModel(),
         owner = "NakatsukaKyohei",
         repo = "GithubSub",
         issueNumber = 2,

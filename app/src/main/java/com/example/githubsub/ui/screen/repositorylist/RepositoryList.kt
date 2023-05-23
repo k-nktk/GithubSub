@@ -11,9 +11,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-@Preview
 fun RepositoryList(
-    viewModel: RepositoryListViewModel = hiltViewModel()
+    viewModel: BaseRepositoryListViewModel = hiltViewModel<RepositoryListViewModel>()
 ) {
 
     val state by viewModel.state.collectAsState()
@@ -34,4 +33,12 @@ fun RepositoryList(
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun PreviewRepositoryList() {
+    RepositoryList(
+        viewModel = PreviewRepositoryListViewModel()
+    )
 }

@@ -24,12 +24,14 @@ import coil.compose.AsyncImage
 import com.example.githubsub.ui.screen.ObserveLifecycleEvent
 
 @Composable
-@Preview
 fun UserList(
-    viewModel: UserListViewModel = hiltViewModel(),
+    viewModel: BaseUserListViewModel = hiltViewModel<UserListViewModel>(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchMainUser()
+    }
     val focusRequester = remember { FocusRequester() }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -130,11 +132,17 @@ fun UserList(
         )
     }
 
-    ObserveLifecycleEvent { event ->
-        // 検出したイベントに応じた処理を実装する。
-        when (event) {
-            Lifecycle.Event.ON_CREATE -> { viewModel.fetchMainUser() }
-            else -> {}
-        }
-    }
+//    ObserveLifecycleEvent { event ->
+//        // 検出したイベントに応じた処理を実装する。
+//        when (event) {
+//            Lifecycle.Event.ON_CREATE -> { viewModel.fetchMainUser() }
+//            else -> {}
+//        }
+//    }
+}
+
+@Composable
+@Preview
+fun PreviewUserList() {
+    UserList(viewModel = PreviewUserListViewModel())
 }
