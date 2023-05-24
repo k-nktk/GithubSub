@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.UserItem
 import com.example.githubsub.model.UserList
-import com.example.githubsub.repository.datastore.DataStoreRepository
+import com.example.githubsub.repository.datastore.settings.SettingsRepository
+import com.example.githubsub.repository.datastore.settings.Result
 import com.example.githubsub.repository.user.GithubUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ abstract class BaseUserListViewModel: ViewModel() {
 
 @HiltViewModel
 class UserListViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository,
+    private val dataStoreRepository: SettingsRepository,
     private val repository: GithubUser
 ): BaseUserListViewModel(){
 
@@ -66,14 +67,14 @@ class UserListViewModel @Inject constructor(
         val oldState = currentState()
         viewModelScope.launch(Dispatchers.Main) {
             when(val result = dataStoreRepository.getUserResult()) {
-                is com.example.githubsub.repository.datastore.Result.Success -> {
+                is Result.Success -> {
                     if (!result.data.user.isNullOrEmpty()) {
                         updateState { oldState.copy(userName = oldState.userName, userList = oldState.userList, mainUser = result.data.user) }
                     } else {
                         updateState { oldState.copy(userName = oldState.userName, userList = oldState.userList, mainUser = "ユーザーが登録されていません。") }
                     }
                 }
-                is com.example.githubsub.repository.datastore.Result.Error -> {
+                is Result.Error -> {
                     updateState { oldState.copy(userName = oldState.userName, userList = oldState.userList, mainUser = "Error") }
 
                 }

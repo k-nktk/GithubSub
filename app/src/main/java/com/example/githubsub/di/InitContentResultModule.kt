@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
+import com.example.application.InitContentsPreference
 import com.example.application.SettingsPreference
+import com.example.githubsub.data.InitContentsSerializer
 import com.example.githubsub.data.SettingsSerializer
-import com.example.githubsub.repository.datastore.settings.SettingsRepository
+import com.example.githubsub.repository.datastore.initcontents.IInitContentsRepository
+import com.example.githubsub.repository.datastore.initcontents.InitContentsRepository
 import com.example.githubsub.repository.datastore.settings.ISettingsRepository
+import com.example.githubsub.repository.datastore.settings.SettingsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -16,16 +20,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
-object UserResultModule {
+object InitContentResultModule {
     @Provides
     @Singleton
-    fun providesUserPreferencesDataStore(
+    fun providesInitContentsPreferencesDataStore(
         @ApplicationContext context: Context,
-        resultSerializer: SettingsSerializer
-    ): DataStore<SettingsPreference> =
+        resultSerializer: InitContentsSerializer
+    ): DataStore<InitContentsPreference> =
         DataStoreFactory.create(
             serializer = resultSerializer,
         ) {
@@ -35,10 +38,10 @@ object UserResultModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class UserResultRepositoryModule {
+abstract class InitContentResultRepositoryModule {
     @Singleton
     @Binds
-    abstract fun bindUserResultRepository(
-        impl: SettingsRepository
-    ): ISettingsRepository
+    abstract fun bindInitContentResultRepository(
+        impl: InitContentsRepository
+    ): IInitContentsRepository
 }
