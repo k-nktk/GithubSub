@@ -1,4 +1,4 @@
-package com.example.githubsub.repository.datastore.settings
+package com.example.githubsub.repository.datastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
@@ -10,9 +10,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SettingsRepository @Inject constructor(
+class DataStoreRepository @Inject constructor(
     private val userResultDataStore: DataStore<SettingsPreference>,
-) : ISettingsRepository {
+) : IDataStoreRepository {
     override suspend fun writeUserResult(user: String) {
         withContext(Dispatchers.IO) {
             try {
@@ -21,7 +21,7 @@ class SettingsRepository @Inject constructor(
                         .build()
                 }
             } catch (exception: Exception) {
-                Log.e("writeUserResult", "Failed to update user preferences")
+                Log.e("QRCodeResult", "Failed to update user preferences")
             }
         }
     }

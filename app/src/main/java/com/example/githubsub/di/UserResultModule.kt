@@ -6,8 +6,8 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.example.application.SettingsPreference
 import com.example.githubsub.data.SettingsSerializer
-import com.example.githubsub.repository.datastore.settings.SettingsRepository
-import com.example.githubsub.repository.datastore.settings.ISettingsRepository
+import com.example.githubsub.repository.datastore.DataStoreRepository
+import com.example.githubsub.repository.datastore.IDataStoreRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -39,6 +39,6 @@ abstract class UserResultRepositoryModule {
     @Singleton
     @Binds
     abstract fun bindUserResultRepository(
-        impl: SettingsRepository
-    ): ISettingsRepository
+        impl: DataStoreRepository
+    ): IDataStoreRepository
 }

@@ -34,7 +34,7 @@ import com.example.githubsub.ui.theme.GithubSubTheme
 fun IssueList(
     viewModel: BaseIssueListViewModel = hiltViewModel<IssueListViewModel>(),
     onClickForNav: (String, String, Int, String, String, List<Label>) -> Unit = {
-            _: String, _: String, _: Int, _: String, _: String, _: List<Label> -> },
+            owner: String, repo: String, issueNumber: Int, ownerImageUrl: String, issueTitle: String, issueLabel: List<Label> -> },
 ) {
     LaunchedEffect(Unit) {
         viewModel.fetchIssue()

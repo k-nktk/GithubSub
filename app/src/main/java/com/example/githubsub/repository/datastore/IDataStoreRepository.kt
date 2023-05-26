@@ -1,8 +1,8 @@
-package com.example.githubsub.repository.datastore.settings
+package com.example.githubsub.repository.datastore
 
 import com.example.application.SettingsPreference
 
-interface ISettingsRepository {
+interface IDataStoreRepository {
     suspend fun writeUserResult(user: String)
 
     suspend fun getUserResult(): Result<SettingsPreference>

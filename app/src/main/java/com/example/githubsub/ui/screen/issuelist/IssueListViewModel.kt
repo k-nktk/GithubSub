@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubsub.BuildConfig
 import com.example.githubsub.model.Label
-import com.example.githubsub.repository.datastore.settings.SettingsRepository
-import com.example.githubsub.repository.datastore.settings.Result
+import com.example.githubsub.repository.datastore.DataStoreRepository
+import com.example.githubsub.repository.datastore.Result
 import com.example.githubsub.repository.issue.GithubIssueRepository
 import com.example.githubsub.repository.repository.GithubProjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +27,7 @@ abstract class BaseIssueListViewModel: ViewModel() {
 
 @HiltViewModel
 class IssueListViewModel @Inject constructor(
-    private val dataStoreRepository: SettingsRepository,
+    private val dataStoreRepository: DataStoreRepository,
     private val projectRepository: GithubProjectRepository,
     private val issueRepository: GithubIssueRepository
 ): BaseIssueListViewModel() {
