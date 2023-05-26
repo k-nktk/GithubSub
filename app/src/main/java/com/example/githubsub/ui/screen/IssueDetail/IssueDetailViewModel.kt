@@ -71,7 +71,13 @@ class IssueDetailViewModel @Inject constructor(
 
 class PreviewIssueDetailViewModel: BaseIssueDetailViewModel() {
     override val state: StateFlow<IssueDetailState> = MutableStateFlow(
-            IssueDetailState(mutableListOf(CommentListItem("test_comment", UserItem(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4"))))
+            IssueDetailState(mutableListOf(
+                CommentListItem("test_comment", UserItem(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4")),
+                CommentListItem("test_comment", UserItem(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4")),
+                CommentListItem("test_comment", UserItem(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4")),
+                CommentListItem("test_comment", UserItem(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4")),
+                CommentListItem("test_comment", UserItem(0, "nakatsukakyohei", "https://avatars.githubusercontent.com/u/44229263?v=4"))
+            ))
     )
 
     override fun getIssueDetail(owner: String, repo: String, issueNumber: Int) {

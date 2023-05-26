@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -32,6 +33,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.githubsub.model.Label
 import com.example.githubsub.ui.theme.GithubSubTheme
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun IssueDetail(
@@ -64,7 +67,7 @@ fun IssueDetail(
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(2.dp)
+                    .padding(4.dp)
             ) {
                 Column(
                     modifier = Modifier
@@ -87,15 +90,15 @@ fun IssueDetail(
                         Text("$owner opened this issue")
                     }
 //                    LazyHorizontalGrid(rows = GridCells.Adaptive(0.dp), content = )
-                    LazyRow(
-                        Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                    FlowRow(
+                        mainAxisAlignment = FlowMainAxisAlignment.End,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(issueLabel) {
+
+                        issueLabel.map{
                             Row(
                                 modifier = Modifier
-                                    .padding(4.dp)
+                                    .padding(2.dp)
                                     .background(
                                         color = Color.LightGray,
                                         shape = RoundedCornerShape(50)
@@ -105,7 +108,6 @@ fun IssueDetail(
                             ) {
                                 Canvas(
                                     modifier = Modifier
-                                        .padding(horizontal = 1.dp)
                                         .size(16.dp),
                                 ) {
                                     val labelColor = viewModel.provideLabelColor(it)
@@ -114,21 +116,42 @@ fun IssueDetail(
                                     )
 //                                    }
                                 }
-                                Text(text = it.name, fontSize = 10.sp, modifier = Modifier.padding(horizontal = 1.dp))
+                                Text(
+                                    text = it.name,
+                                    fontSize = 10.sp,
+                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                )
 
                             }
                         }
-
                     }
                 }
             }
             LazyColumn {
                 items(state.commentItems) {
-                    Row() {
-                        AsyncImage(model = it.user.imageUrl, contentDescription = null)
-                        Column() {
-                            Text(text = it.user.login)
-                            Text(text = it.comment)
+                    Row(
+                        Modifier.padding(8.dp)
+                    ) {
+                        AsyncImage(
+                            model = it.user.imageUrl,
+                            contentDescription = null,
+                            Modifier
+                                .clip(CircleShape)
+                                .size(40.dp)
+                        )
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = it.user.login,
+                                style = MaterialTheme.typography.body2,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = it.comment,
+                                style = MaterialTheme.typography.subtitle1
+                            )
                         }
                     }
                 }
@@ -148,6 +171,6 @@ fun PreviewTestScreen() {
         issueNumber = 2,
         ownerImageUrl = "ttps://avatars.githubusercontent.com/u/44229263?v=4",
         issueTitle = "TestIssueTitle",
-        issueLabel = mutableListOf(Label(id = 0, name = "enhancement", color = "ffffff"))
+        issueLabel = mutableListOf(Label(id = 0, name = "bugg", color = "ffffff"), Label(id = 0, name = "enhancement", color = "ffffff"), Label(id = 0, name = "enhancementfff", color = "ffffff"), Label(id = 0, name = "enhancement", color = "ffffff"))
     )
 }

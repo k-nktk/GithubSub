@@ -96,18 +96,18 @@ fun IssueList(
                             elevation = 8.dp
                         ) {
 
-                            Row() {
+                            Row(
+                                Modifier.padding(8.dp)
+                            ) {
                                 AsyncImage(
                                     model = it.imageUrl,
                                     contentDescription = null,
                                     Modifier
                                         .clip(CircleShape)
                                         .size(40.dp)
-                                        .padding(4.dp)
                                 )
                                 Column(
                                     Modifier
-                                        .padding(8.dp)
                                         .fillMaxWidth()
                                 ) {
                                     Row() {
