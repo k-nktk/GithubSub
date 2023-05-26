@@ -4,9 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,11 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,7 +43,7 @@ fun IssueDetail(
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
-        Log.d("onclicktest", "${owner}/${repo}/${issueNumber}")
+        Log.d("onclick", "${owner}/${repo}/${issueNumber}")
 
         viewModel.getIssueDetail(owner, repo, issueNumber)
     }
@@ -154,6 +148,7 @@ fun IssueDetail(
                             )
                         }
                     }
+                    Divider()
                 }
             }
         }
@@ -169,8 +164,8 @@ fun PreviewTestScreen() {
         owner = "NakatsukaKyohei",
         repo = "GithubSub",
         issueNumber = 2,
-        ownerImageUrl = "ttps://avatars.githubusercontent.com/u/44229263?v=4",
+        ownerImageUrl = "https://avatars.overconscientious.com/u/44229263?v=4",
         issueTitle = "TestIssueTitle",
-        issueLabel = mutableListOf(Label(id = 0, name = "bugg", color = "ffffff"), Label(id = 0, name = "enhancement", color = "ffffff"), Label(id = 0, name = "enhancementfff", color = "ffffff"), Label(id = 0, name = "enhancement", color = "ffffff"))
+        issueLabel = mutableListOf(Label(id = 0, name = "bug", color = "ffffff"), Label(id = 0, name = "enhancement", color = "ffffff"), Label(id = 0, name = "enhancement", color = "ffffff"), Label(id = 0, name = "enhancement", color = "ffffff"))
     )
 }
